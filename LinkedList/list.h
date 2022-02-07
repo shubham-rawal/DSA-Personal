@@ -1,6 +1,8 @@
 //We are trying to create a replica of the STL "List" while implementing linked list.
 #include<iostream>
 using namespace std;
+
+
 //Forward Declaration 
 class List;
 
@@ -125,6 +127,7 @@ public:
         //first create the new connection, then break the old connection
         n->next = temp->next;
         temp->next = n;
+        return;
     }
 
         //search inside a linked list
@@ -155,17 +158,19 @@ public:
         head = head->next;
         temp->next = NULL;      //doing this so that even if destructor is called it should not affect the rest of the linked list
         delete temp;
+        return;
     }
 
         //pop Back
     void pop_back(){
-        Node * iterator = head;
-        while (iterator->next->next != NULL) {
-            iterator = iterator->next;
-        }
-        tail = iterator;
-        delete tail->next;
-        tail->next = NULL;
+        Node * temp = head;
+        while(temp->next->next != NULL)   temp = temp->next;
+
+        Node * last = temp->next;
+
+        temp->next = NULL;
+        delete last;
+        return;
     }
 
         //remove
@@ -178,7 +183,24 @@ public:
         temp->next = n->next;
         n->next = NULL;
         delete n;
+        return;
     }
+        //reverse
+    void reverse(){
+        Node * current = head;
+        Node * temp = NULL;
+        Node * prev = NULL;
+        while(current != NULL){
+            temp = current -> next;
+            current -> next = prev;
+            prev = current;
+            current = temp;
+        }
+
+        head = prev;
+    }
+
+
     //deleting the entire linkedlist
     ~List(){
         if(head != NULL){
