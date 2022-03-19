@@ -1,5 +1,6 @@
 #include<iostream>
 #include<queue>
+#include<cmath>
 using namespace std;
 //We will create a binary tree with the input : 1 2 4 -1 -1 5 7 -1 -1 -1 3 -1 6 -1 -1
 
@@ -110,6 +111,19 @@ void levelOrderPrint(Node* root){
     return;
 }
 
+//Helper function : Height of a tree
+int height(Node* root){
+
+    if(root == NULL)    return 0;
+
+    int h1 = height(root->left);
+
+    int h2 = height(root->right);
+
+    return 1 + max(h1, h2);
+
+}
+
 int main(){
     Node* root = buildTree();
     // printPreorder(root);
@@ -121,6 +135,8 @@ int main(){
     // printPostorder(root);
     // cout<<endl;
 
-    levelOrderPrint(root);
-    cout<<endl;
+    // levelOrderPrint(root);
+    // cout<<endl;
+
+    cout<<"Height of this tree is : "<<height(root)<<endl;
 }
