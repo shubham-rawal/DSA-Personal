@@ -2,6 +2,7 @@
 #include<queue>
 #include<cmath>
 using namespace std;
+
 //We will create a binary tree with the input : 1 2 4 -1 -1 5 7 -1 -1 -1 3 -1 6 -1 -1
 
 //NOTE : -1 represents NULL
@@ -124,6 +125,52 @@ int height(Node* root){
 
 }
 
+int diameter(Node* root){
+    //Time complexity : we're visiting each node and performing the height function at each node which is O(N). Thus the overall complexity of the diameter function becomes O(N^2).
+    //refer to the notes for logic.
+    //base case
+    if(root == NULL)
+        return 0;
+
+    //recursive case
+    int D1 = height(root->left) + height(root->right);
+    int D2 = diameter(root->left);
+    int D3 = diameter(root->right);
+
+    return max(D1, max(D2, D3));
+}
+
+//Diameter Optimised ------------------------
+class HDPair{
+public:
+    int height;
+    int diameter;
+};
+
+HDPair optDiameter(Node* root){
+    HDPair p;
+    //base case
+    if(root == NULL){
+        p.height = p.diameter = 0;
+        return p;
+    }
+
+    //otherwise
+    HDPair Left = optDiameter(root->left);
+    HDPair Right = optDiameter(root->right);
+
+    //for the current node height
+    p.height = max(Left.height, Right.height) + 1;
+
+    //for the current node diameter
+    int D1 =  Left.height + Right.height;
+    int D2 = Left.diameter;
+    int D3 = Right.diameter;
+
+    p.diameter = max(D1, max(D2, D3));
+    return p;
+}
+
 int main(){
     Node* root = buildTree();
     // printPreorder(root);
@@ -138,5 +185,7 @@ int main(){
     // levelOrderPrint(root);
     // cout<<endl;
 
-    cout<<"Height of this tree is : "<<height(root)<<endl;
+    cout<<"Diameter of this tree is : "<<diameter(root)<<endl;
+
+    cout<<"Optimised diameter of this tree is : "<<optDiameter(root).diameter<<endl;
 }
