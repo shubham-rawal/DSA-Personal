@@ -100,6 +100,26 @@ Node* remove(Node* root, int key){
     return root;
 }
 
+//Print Range -- Print all elements in the BST that lies between k1 and k2
+void printRange(Node* root, int k1, int k2){
+    if(root == NULL)    return;
+
+    if(root->key >= k1 and root->key <= k2){
+        //call on both sides
+        printRange(root->left, k1, k2);
+        cout<<root->key<<" ";
+        printRange(root->right, k1, k2);
+    }
+    else if(root->key > k2){
+        printRange(root->left, k1, k2);
+    }
+    else{
+        //root->key < k1
+        printRange(root->right, k1, k2);
+    }
+}
+
+
 int main(){
 
     Node* root = NULL;
@@ -111,12 +131,14 @@ int main(){
         root = insert(root, arr[i]);
     }
 
-    int key;
-    cin>>key;
-    root = remove(root, key);
-    printInOrder(root);
-    cout<<endl;
+    // int key;
+    // cin>>key;
+    // root = remove(root, key);
+    // printInOrder(root);
+    // cout<<endl;
     // cout<<search(root, 4);
+
+    printRange(root, 5, 12);
 
 
     return 0;
