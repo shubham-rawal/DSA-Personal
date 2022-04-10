@@ -17,6 +17,11 @@ public:
         this->value = value;
         next = NULL;
     }
+
+    //using this recursive destructor, when we delete the ith linked list, we are actually deleting the entire linked list this way and not just its head.
+    ~Node(){
+        if(next!=NULL)  delete next;
+    }
 };
 
 //hashtable class
@@ -50,6 +55,33 @@ class Hashtable{
         //increase the table size 
         ts = 2*ts + 1;      //ideally you should make it prime.
         table = new Node<T> *[ts];
+
+        //initialise each of the new head pointers in the new table to NULL, else they would contain garbage
+        for(int i = 0; i<ts; i++){
+            table[i] = NULL;
+        }
+
+        //Copy elements from oldTable to newTable
+        for(int i = 0; i<ts; i++){
+            Node<T> *temp = oldTable[i];
+
+            while(temp!=NULL){
+                string key = temp->key;
+                T value = temp->value;
+
+                //since we have already updated the table variable (the class member), all the insertions would happen in the new table
+                insert(key, value);
+                temp = temp->next;
+            }
+
+            //destroy the ith linkedlist
+            if(oldTable[i] != NULL){
+                delete oldTable[i];
+            }
+        }
+
+        //now that we have deleted row by row linked list, we need to delete the whole table now.
+        delete [] oldTable;
     }
 
 public:
@@ -76,6 +108,22 @@ public:
 
         if(load_factor > 0.7){
             rehash();
+        }
+    }
+
+
+    //Printing the hashtable
+    void print(){
+        //Iterate over the buckets
+        for(int i = 0; i<ts; i++){
+            cout<<"Bucket "<<i<"->";
+
+            Node<T> *temp = table[i];
+            while(temp!=NULL){
+                cout<<temp->key<<" -> ";
+                temp = temp->next;
+            }
+            cout<<endl;
         }
     }
 };
