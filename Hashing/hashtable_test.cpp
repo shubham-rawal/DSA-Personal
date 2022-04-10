@@ -12,7 +12,17 @@ int main(){
     h.insert("Litchi", 170);
     h.insert("Grapes", 255);
 
-    h.print();
+    // h.print();
+    string fruit;
+    cin>>fruit;
+
+    int *price = h.search(fruit);
+    if(price!=NULL){
+        cout<<"Price is : "<<*price<<endl;
+    }
+    else{
+        cout<<"Fruit not found"<<endl;
+    }
 
     return 0;
 }
