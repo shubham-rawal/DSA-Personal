@@ -1,8 +1,6 @@
-//also called level order traversal, we print/visit all the nodes level wise.
+//we visit each node, and then call a recursive function to visit all subsequent nodes.
 /*
-    Algorithm: ITERATIVE
-    we take a source node. we push it into the queue. Then, we mark it as visited and push it's neighbours into the queue. 
-    Repeat this process.
+    Algorithm: RECURSIVE
 
     Time Complexity : O(V+E)
     
@@ -34,28 +32,25 @@ public:
 
 
 //--------------------------------------------------------------------------------------->
-    //BFS
-    void bfs(int source){
-        queue<int> q;
-        bool *visited = new bool[V]{0};         //again dynamic initialisation as done previously
+    //DFS
 
-        q.push(source);
-        visited[source] = true; 
+    void dfsHelper(int node, bool *visited){
+        visited[node] = true;
+        cout<<node<<", ";
 
-        while(!q.empty()){
-            //Do some work for every node
-            int f = q.front();
-            cout<<f<<endl;
-            q.pop();
-
-            //Push the neighbours of the current node if they're not already visited.
-            for(auto nbr: l[f]){
-                if(!visited[nbr]){
-                    q.push(nbr);
-                    visited[nbr] = true; 
-                }
+        //make a dfs call to all its unvisited neighbours
+        for(int nbr: l[node]){          //for the source node, this for loop will run only once. for eg, if 1->(0, 2); then upon calling 0, it automatically will call 2 at some point. Thus it won't call 2 again from this loop.
+            if(!visited[nbr]){
+                dfsHelper(nbr, visited);
             }
         }
+        return;
+    }
+
+    void dfs(int source){
+        bool *visited = new bool[V]{0};         //since we can create this visited array only once, we have to use a helper function
+        dfsHelper(source, visited);
+
     }
 //<---------------------------------------------------------------------------------------
 
@@ -83,7 +78,7 @@ int main(){
     g.addEdge(0,4);
     g.addEdge(3,4);
     // g.printAdjList();
-    g.bfs(1);
+    g.dfs(1);
 
     return 0;
 
